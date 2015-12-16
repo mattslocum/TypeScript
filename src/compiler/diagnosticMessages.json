@@ -1771,6 +1771,14 @@
         "category": "Error",
         "code": 2661
     },
+    "Exports are not permitted in module augmentations.": {
+        "category": "Error",
+        "code": 2662
+    },
+    "Imports are not permitted in module augmentations. Consider moving them to the enclosing external module": {
+        "category": "Error",
+        "code": 2663
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

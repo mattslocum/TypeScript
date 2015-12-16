@@ -501,15 +501,25 @@ namespace ts {
                         return false;
                     }
 
-                    // check imports
+                    // check imports and module augmentations
                     collectExternalModuleReferences(newSourceFile);
                     if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
                         // imports has changed
                         return false;
                     }
+                    if (!arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations, moduleNameIsEqualTo)) {
+                        // moduleAugmentations has changed
+                        return false;
+                    }
 
                     if (resolveModuleNamesWorker) {
-                        const moduleNames = map(newSourceFile.imports, name => name.text);
+                        const moduleNames: string[] = [];
+                        for (const moduleName of newSourceFile.imports) {
+                            moduleNames.push(moduleName.text);
+                        }
+                        for (const moduleName of newSourceFile.moduleAugmentations) {
+                            moduleNames.push(moduleName.text);
+                        }
                         const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory));
                         // ensure that module resolution results are still correct
                         for (let i = 0; i < moduleNames.length; ++i) {
