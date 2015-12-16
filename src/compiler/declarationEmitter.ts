@@ -102,6 +102,7 @@ namespace ts {
                 });
             }
 
+            resultHasExternalModuleSpecifier = false;
             if (!isBundledEmit || !isExternalModule(sourceFile)) {
                 noDeclare = false;
                 emitSourceFile(sourceFile);
@@ -139,6 +140,14 @@ namespace ts {
 
                 allSourcesModuleElementDeclarationEmitInfo = allSourcesModuleElementDeclarationEmitInfo.concat(moduleElementDeclarationEmitInfo);
                 moduleElementDeclarationEmitInfo = [];
+            }
+
+            if (isExternalModule(sourceFile) && sourceFile.moduleAugmentations.length && !resultHasExternalModuleSpecifier) {
+                // if file was external module with augmentations - this fact should be preserved in .d.ts as well.
+                // in case if we didn't write any external module specifiers in .d.ts we need to emit something 
+                // that will force compiler to think that this file is an external module - 'export {}' is a reasonable choice here.
+                write("export {};");
+                writeLine();
             }
         });
 
@@ -490,13 +499,6 @@ namespace ts {
             enclosingDeclaration = node;
             emitDetachedComments(currentText, currentLineMap, writer, writeCommentRange, node, newLine, true /* remove comments */);
             emitLines(node.statements);
-            if (isCurrentFileExternalModule && node.moduleAugmentations.length && !resultHasExternalModuleSpecifier) {
-                // if file was external module with augmentations - this fact should be preserved in .d.ts as well.
-                // in case if we didn't write any external module specifiers in .d.ts we need to emit something 
-                // that will force compiler to think that this file is an external module - 'export {}' is a reasonable choice here.
-                write("export {};");
-                writeLine();
-            }
         }
 
         // Return a temp variable name to be used in `export default` statements.
