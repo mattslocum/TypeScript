@@ -15564,7 +15564,7 @@ namespace ts {
                 if (!isExternalOrCommonJsModule(file)) {
                     mergeSymbolTable(globals, file.locals);
                 }
-                else if (file.moduleAugmentations.length) {
+                if (file.moduleAugmentations.length) {
                     for (const augmentation of file.moduleAugmentations) {
                         mergeModuleAugmentation(augmentation);
                     }

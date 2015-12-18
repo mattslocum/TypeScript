@@ -949,7 +949,7 @@ namespace ts {
                         }
                         break;
                     case SyntaxKind.ModuleDeclaration:
-                        if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && isInAmbientContext(node)) {
+                        if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && (inAmbientModule || node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
                             const moduleName = <LiteralExpression>(<ModuleDeclaration>node).name;
                             // Ambient module declarations can be interpreted as augmentations for some existing external modules.
                             // This will happen in two cases:
