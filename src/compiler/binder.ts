@@ -109,6 +109,7 @@ namespace ts {
         let blockScopeContainer: Node;
         let lastContainer: Node;
         let seenThisKeyword: boolean;
+        let isSourceFileExternalModule: boolean;
 
         // state used by reachability checks
         let hasExplicitReturn: boolean;
@@ -129,8 +130,9 @@ namespace ts {
         function bindSourceFile(f: SourceFile, opts: CompilerOptions) {
             file = f;
             options = opts;
-            inStrictMode = !!file.externalModuleIndicator;
+            isSourceFileExternalModule = inStrictMode = !!file.externalModuleIndicator;
             classifiableNames = {};
+
             Symbol = objectAllocator.getSymbolConstructor();
 
             if (!file.locals) {
@@ -748,9 +750,9 @@ namespace ts {
             lastContainer = next;
         }
 
-        function declareSymbolAndAddToSymbolTable(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): void {
+        function declareSymbolAndAddToSymbolTable(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
             // Just call this directly so that the return type of this function stays "void".
-            declareSymbolAndAddToSymbolTableWorker(node, symbolFlags, symbolExcludes);
+            return declareSymbolAndAddToSymbolTableWorker(node, symbolFlags, symbolExcludes);
         }
 
         function declareSymbolAndAddToSymbolTableWorker(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
@@ -844,7 +846,12 @@ namespace ts {
         function bindModuleDeclaration(node: ModuleDeclaration) {
             setExportContextFlag(node);
             if (node.name.kind === SyntaxKind.StringLiteral) {
-                declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+                const moduleSymbol = declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+                if (moduleSymbol.valueDeclaration === node) {
+                    moduleSymbol.moduleAugmentation = isSourceFileExternalModule
+                        ? container.kind === SyntaxKind.SourceFile
+                        : container.kind === SyntaxKind.ModuleDeclaration && isInAmbientContext(container);
+                }
             }
             else {
                 const state = getModuleInstanceState(node);

@@ -353,15 +353,20 @@ namespace ts {
         function mergeSymbolTable(target: SymbolTable, source: SymbolTable) {
             for (const id in source) {
                 if (hasProperty(source, id)) {
+                    const sourceSymbol = source[id];
+                    if (sourceSymbol.moduleAugmentation) {
+                        // skip module augmentations during merging of symbol tables
+                        continue;
+                    }
                     if (!hasProperty(target, id)) {
-                        target[id] = source[id];
+                        target[id] = sourceSymbol;
                     }
                     else {
                         let symbol = target[id];
                         if (!(symbol.flags & SymbolFlags.Merged)) {
                             target[id] = symbol = cloneSymbol(symbol);
                         }
-                        mergeSymbol(symbol, source[id]);
+                        mergeSymbol(symbol, sourceSymbol);
                     }
                 }
             }
@@ -369,8 +374,17 @@ namespace ts {
 
         function mergeModuleAugmentation(moduleName: LiteralExpression): void {
             const moduleDeclaration = <ModuleDeclaration>moduleName.parent;
+            if (moduleDeclaration.symbol.valueDeclaration !== moduleDeclaration) {
+                // this is a combined symbol for multiple augmentations within the same file.
+                // its symbol already has accumulated information for all declarations 
+                // so we need to add it just once - do the work only for first declaration 
+                Debug.assert(moduleDeclaration.symbol.declarations.length > 1);
+                return;
+            }
+
             if (moduleName.text === "/") {
                 // global augmentation
+                // TODO: fix to use 'declare global' syntax.
                 mergeSymbolTable(globals, moduleDeclaration.symbol.exports);
             }
             else {
