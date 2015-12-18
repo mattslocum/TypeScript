@@ -917,7 +917,10 @@ namespace ts {
             let moduleAugmentations: LiteralExpression[];
 
             for (const node of file.statements) {
-                collect(node, /*allowRelativeModuleNames*/ true, /*collectOnlyRequireCalls*/ false);
+                collectModuleReferences(node, /*inAmbientModule*/ false);
+                if (isJavaScriptFile) {
+                    collectRequireCalls(node);
+                }
             }
 
             file.imports = imports || emptyArray;
@@ -925,57 +928,58 @@ namespace ts {
 
             return;
 
-            function collect(node: Node, allowRelativeModuleNames: boolean, collectOnlyRequireCalls: boolean): void {
-                if (!collectOnlyRequireCalls) {
-                    switch (node.kind) {
-                        case SyntaxKind.ImportDeclaration:
-                        case SyntaxKind.ImportEqualsDeclaration:
-                        case SyntaxKind.ExportDeclaration:
-                            let moduleNameExpr = getExternalModuleName(node);
-                            if (!moduleNameExpr || moduleNameExpr.kind !== SyntaxKind.StringLiteral) {
-                                break;
-                            }
-                            if (!(<LiteralExpression>moduleNameExpr).text) {
-                                break;
-                            }
+            function collectModuleReferences(node: Node, inAmbientModule: boolean): void {
+                switch (node.kind) {
+                    case SyntaxKind.ImportDeclaration:
+                    case SyntaxKind.ImportEqualsDeclaration:
+                    case SyntaxKind.ExportDeclaration:
+                        let moduleNameExpr = getExternalModuleName(node);
+                        if (!moduleNameExpr || moduleNameExpr.kind !== SyntaxKind.StringLiteral) {
+                            break;
+                        }
+                        if (!(<LiteralExpression>moduleNameExpr).text) {
+                            break;
+                        }
 
-                            if (allowRelativeModuleNames || !isExternalModuleNameRelative((<LiteralExpression>moduleNameExpr).text)) {
-                                (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
+                        // TypeScript 1.0 spec (April 2014): 12.1.6
+                        // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference other external modules 
+                        // only through top - level external module names. Relative external module names are not permitted.
+                        if (!inAmbientModule || !isExternalModuleNameRelative((<LiteralExpression>moduleNameExpr).text)) {
+                            (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
+                        }
+                        break;
+                    case SyntaxKind.ModuleDeclaration:
+                        if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && isInAmbientContext(node)) {
+                            const moduleName = <LiteralExpression>(<ModuleDeclaration>node).name;
+                            // Ambient module declarations can be interpreted as augmentations for some existing external modules.
+                            // This will happen in two cases:
+                            // - if current file is external module then module augmentation is a ambient module declaration defined in the top level scope
+                            // - if current file is not external module then module augmentation is an ambient module declaration with non-relative module name
+                            //   immediately nested in top level ambient module declaration .
+                            if (isExternalModuleFile || (inAmbientModule && !isExternalModuleNameRelative(moduleName.text))) {
+                                (moduleAugmentations || (moduleAugmentations = [])).push(moduleName);
                             }
-                            break;
-                        case SyntaxKind.ModuleDeclaration:
-                            if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && (node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
-                                if (isExternalModuleFile) {
-                                    // ambient module declarations in external modules are interpreted as module augmentations
-                                    // they don't include module with name <moduleNameExpr> in program but require 
-                                    // that this module should be include by some another way. 
-                                    (moduleAugmentations || (moduleAugmentations = [])).push(<LiteralExpression>(<ModuleDeclaration>node).name);
-                                }
-                                else {
-                                    // TypeScript 1.0 spec (April 2014): 12.1.6
-                                    // An AmbientExternalModuleDeclaration declares an external module. 
-                                    // This type of declaration is permitted only in the global module.
-                                    // The StringLiteral must specify a top - level external module name.
-                                    // Relative external module names are not permitted
-                                    forEachChild((<ModuleDeclaration>node).body, node => {
-                                        // TypeScript 1.0 spec (April 2014): 12.1.6
-                                        // An ExternalImportDeclaration in anAmbientExternalModuleDeclaration may reference other external modules 
-                                        // only through top - level external module names. Relative external module names are not permitted.
-                                        collect(node, /*allowRelativeModuleNames*/ false, collectOnlyRequireCalls);
-                                    });
+                            else if (!inAmbientModule) {
+                                // An AmbientExternalModuleDeclaration declares an external module. 
+                                // This type of declaration is permitted only in the global module.
+                                // The StringLiteral must specify a top - level external module name.
+                                // Relative external module names are not permitted
+
+                                // NOTE: body of ambient module is always a module block
+                                for (const statement of (<ModuleBlock>(<ModuleDeclaration>node).body).statements) {
+                                    collectModuleReferences(statement, /*inAmbientModule*/ true);
                                 }
                             }
-                            break;
-                    }
+                        }
                 }
+            }
 
-                if (isJavaScriptFile) {
-                    if (isRequireCall(node)) {
-                        (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
-                    }
-                    else {
-                        forEachChild(node, node => collect(node, allowRelativeModuleNames, /*collectOnlyRequireCalls*/ true));
-                    }
+            function collectRequireCalls(node: Node): void {
+                if (isRequireCall(node)) {
+                    (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
+                }
+                else {
+                    forEachChild(node, collectRequireCalls);
                 }
             }
         }

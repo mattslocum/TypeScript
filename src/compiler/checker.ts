@@ -1650,6 +1650,35 @@ namespace ts {
             return undefined;
         }
 
+        function isAmbientModule(node: Node): boolean {
+            return node && node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && isInAmbientContext(node);
+        }
+
+        function isExternalModuleAugmentation(node: Node): boolean {
+            // external module augmentation is a ambient module declaration that is either:
+            // - defined in the top level scope and source file is an external module
+            // - defined inside ambient module declaration located in the top level scope and source file not an external module
+            if (!node || !isAmbientModule(node)) {
+                return false;
+            }
+            switch (node.parent.kind) {
+                case SyntaxKind.SourceFile:
+                    return isExternalModule(<SourceFile>node.parent);
+                case SyntaxKind.ModuleBlock:
+                    return isAmbientModule(node.parent.parent) &&
+                        node.parent.parent.parent.kind === SyntaxKind.SourceFile &&
+                        !isExternalModule(<SourceFile>node.parent.parent.parent);
+                default:
+                    return false;
+            }
+        }
+
+        function isTopLevelInExternalModuleAugmentation(node: Node): boolean {
+            return node && node.parent &&
+                node.parent.kind === SyntaxKind.ModuleBlock &&
+                isExternalModuleAugmentation(node.parent.parent);
+        }
+
         function getSymbolDisplayBuilder(): SymbolDisplayBuilder {
 
             function getNameOfSymbol(symbol: Symbol): string {
@@ -2199,25 +2228,6 @@ namespace ts {
                 buildSignatureDisplay,
                 buildReturnTypeDisplay
             });
-        }
-
-        function isExternalModuleAugmentation(node: Node): boolean {
-            if (node) {
-                return node.kind === SyntaxKind.ModuleDeclaration &&
-                    (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral &&
-                    node.parent.kind === SyntaxKind.SourceFile &&
-                    isExternalModule(<SourceFile>node.parent);
-            }
-            return false;
-        }
-
-        function isTopLevelInExternalModuleAugmentation(node: Node): boolean {
-            if (node && node.parent) {
-                return node.parent.kind === SyntaxKind.ModuleBlock &&
-                    node.parent.parent.kind === SyntaxKind.ModuleDeclaration &&
-                    isExternalModuleAugmentation(<ModuleDeclaration>node.parent.parent);
-            }
-            return false;
         }
 
         function isDeclarationVisible(node: Declaration): boolean {
@@ -14222,7 +14232,7 @@ namespace ts {
                     Diagnostics.Export_declarations_are_not_permitted_in_a_namespace :
                     Diagnostics.Import_declarations_in_a_namespace_cannot_reference_a_module);
                 return false;
-            }            
+            }
             if (inAmbientExternalModule && isExternalModuleNameRelative((<LiteralExpression>moduleName).text)) {
                 // we have already reported errors on top level imports\exports in external module augmentations in checkModuleDeclaration
                 // no need to do this again.
