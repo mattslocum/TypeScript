@@ -1691,7 +1691,7 @@
         "category": "Error",
         "code": 2528
     },
-    "JSX element attributes type '{0}' must be an object type.": {
+    "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
     },
@@ -1759,25 +1759,33 @@
         "category": "Error",
         "code": 2658
     },
-    "Module augmentations should be defined on the top level of the file.": {
+    "'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.": {
         "category": "Error",
         "code": 2659
     },
-    "Invalid module name in augmentation, module '{0}' cannot be found.": {
+    "'super' can only be referenced in members of derived classes or object literal expressions.": {
         "category": "Error",
         "code": 2660
     },
-    "Module augmentation cannot introduce new names in the top level scope.": {
+    "Module augmentations should be defined on the top level of the file.": {
         "category": "Error",
         "code": 2661
     },
-    "Exports are not permitted in module augmentations.": {
+    "Invalid module name in augmentation, module '{0}' cannot be found.": {
         "category": "Error",
         "code": 2662
     },
-    "Imports are not permitted in module augmentations. Consider moving them to the enclosing external module": {
+    "Module augmentation cannot introduce new names in the top level scope.": {
         "category": "Error",
         "code": 2663
+    },
+    "Exports are not permitted in module augmentations.": {
+        "category": "Error",
+        "code": 2664
+    },
+    "Imports are not permitted in module augmentations. Consider moving them to the enclosing external module": {
+        "category": "Error",
+        "code": 2665
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

@@ -1,6 +1,6 @@
 tests/cases/compiler/observable.ts(4,12): error TS2323: Cannot redeclare exported variable 'x'.
 tests/cases/compiler/x.ts(3,9): error TS2323: Cannot redeclare exported variable 'x'.
-tests/cases/compiler/x.ts(3,9): error TS2661: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/x.ts(3,9): error TS2663: Module augmentation cannot introduce new names in the top level scope.
 
 
 ==== tests/cases/compiler/x.ts (2 errors) ====
@@ -10,7 +10,7 @@ tests/cases/compiler/x.ts(3,9): error TS2661: Module augmentation cannot introdu
             ~
 !!! error TS2323: Cannot redeclare exported variable 'x'.
             ~
-!!! error TS2661: Module augmentation cannot introduce new names in the top level scope.
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
     }
     export {}
     
