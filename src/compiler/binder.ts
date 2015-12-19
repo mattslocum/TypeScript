@@ -350,7 +350,14 @@ namespace ts {
                 //   2. When we checkIdentifier in the checker, we set its resolved symbol to the local symbol,
                 //      but return the export symbol (by calling getExportSymbolOfValueSymbolIfExported). That way
                 //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
-                if (hasExportModifier || container.flags & NodeFlags.ExportContext) {
+                
+                // NOTE: Nested ambient modules always should go to to 'locals' table to prevent their automatic merge 
+                //       during global merging in the checker.
+                //       The only case when ambient module is permitted inside another module is module augmentation 
+                //       and this case is specially handled. Module augmentations should only be merged with original module definition 
+                //       and should never be merged directly with other augmentation and the latter case would be possible during automatic merge.
+                const isAmbientModule = node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral;
+                if (!isAmbientModule && (hasExportModifier || container.flags & NodeFlags.ExportContext)) {
                     const exportKind =
                         (symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |
                         (symbolFlags & SymbolFlags.Type ? SymbolFlags.ExportType : 0) |
@@ -750,9 +757,9 @@ namespace ts {
             lastContainer = next;
         }
 
-        function declareSymbolAndAddToSymbolTable(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
+        function declareSymbolAndAddToSymbolTable(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): void {
             // Just call this directly so that the return type of this function stays "void".
-            return declareSymbolAndAddToSymbolTableWorker(node, symbolFlags, symbolExcludes);
+            declareSymbolAndAddToSymbolTableWorker(node, symbolFlags, symbolExcludes);
         }
 
         function declareSymbolAndAddToSymbolTableWorker(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
@@ -846,13 +853,10 @@ namespace ts {
         function bindModuleDeclaration(node: ModuleDeclaration) {
             setExportContextFlag(node);
             if (node.name.kind === SyntaxKind.StringLiteral) {
-                const moduleSymbol = declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
-                const valueDecl = moduleSymbol.flags & SymbolFlags.ExportValue ? moduleSymbol.exportSymbol.valueDeclaration : moduleSymbol.valueDeclaration;
-                if (valueDecl === node) {
-                    moduleSymbol.moduleAugmentation = isSourceFileExternalModule
-                        ? container.kind === SyntaxKind.SourceFile
-                        : container.kind === SyntaxKind.ModuleDeclaration && isInAmbientContext(container);
+                if (node.flags & NodeFlags.Export) {
+                    errorOnFirstToken(node, Diagnostics.export_modifier_cannot_be_applied_to_ambient_modules_and_module_augmentations_since_they_are_always_visible);
                 }
+                declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
             }
             else {
                 const state = getModuleInstanceState(node);

@@ -1,4 +1,5 @@
 // @module: commonjs
+// @declaration: true
 
 // @filename: O.d.ts
 

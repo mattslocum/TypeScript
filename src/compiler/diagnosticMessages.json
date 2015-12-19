@@ -1779,9 +1779,13 @@
         "category": "Error",
         "code": 2663
     },
-    "Imports are not permitted in module augmentations. Consider moving them to the enclosing external module": {
+    "Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.": {
         "category": "Error",
         "code": 2664
+    },
+    "'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.": {
+        "category": "Error",
+        "code": 2665
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

@@ -354,20 +354,15 @@ namespace ts {
         function mergeSymbolTable(target: SymbolTable, source: SymbolTable) {
             for (const id in source) {
                 if (hasProperty(source, id)) {
-                    const sourceSymbol = source[id];
-                    if (sourceSymbol.moduleAugmentation) {
-                        // skip module augmentations during merging of symbol tables
-                        continue;
-                    }
                     if (!hasProperty(target, id)) {
-                        target[id] = sourceSymbol;
+                        target[id] = source[id];
                     }
                     else {
                         let symbol = target[id];
                         if (!(symbol.flags & SymbolFlags.Merged)) {
                             target[id] = symbol = cloneSymbol(symbol);
                         }
-                        mergeSymbol(symbol, sourceSymbol);
+                        mergeSymbol(symbol, source[id]);
                     }
                 }
             }
@@ -14196,59 +14191,52 @@ namespace ts {
                     }
                 }
 
-                // Checks for ambient external modules.
                 if (isAmbientExternalModule) {
-                    const isAugmentation = getSymbolOfNode(node).moduleAugmentation;
-                    // it is important to use local symbol here
-                    const localSymbol = node.localSymbol || node.symbol;
-                    if (localSymbol.moduleAugmentation) {
-                        // ambient module declaration in external module can be an augmentation for some existing module
-                        // augmentations are defined on the top level in source file so we'll error if location is different
-
+                    if (isExternalModuleAugmentation(node)) {
                         // body of ambient external module is always a module block
                         for (const statement of (<ModuleBlock>node.body).statements) {
-                            checkContentOfModuleAugmentation(statement);
+                            checkBodyOfModuleAugmentation(statement);
                         }
                     }
-                    else {
-                        if (!isGlobalSourceFile(node.parent)) {
-                            error(node.name, Diagnostics.Ambient_modules_cannot_be_nested_in_other_modules_or_namespaces);
-                        }
+                    else if (isGlobalSourceFile(node.parent)) {
                         if (isExternalModuleNameRelative(node.name.text)) {
                             error(node.name, Diagnostics.Ambient_module_declaration_cannot_specify_relative_module_name);
                         }
+                    }
+                    else {
+                        error(node.name, Diagnostics.Ambient_modules_cannot_be_nested_in_other_modules_or_namespaces);
                     }
                 }
             }
             checkSourceElement(node.body);
         }
 
-        function checkContentOfModuleAugmentation(node: Node): void {
+        function checkBodyOfModuleAugmentation(node: Node): void {
             switch (node.kind) {
                 case SyntaxKind.VariableStatement:
                     // error each individual name in variable statement instead of marking the entire variable statement
                     for (const decl of (<VariableStatement>node).declarationList.declarations) {
                         if (isBindingPattern(decl.name)) {
                             for (const el of (<BindingPattern>decl.name).elements) {
-                                checkContentOfModuleAugmentation(el);
+                                checkBodyOfModuleAugmentation(el.name);
                             }
                         }
                         else {
-                            checkContentOfModuleAugmentation(decl.name);
+                            checkBodyOfModuleAugmentation(decl.name);
                         }
                     }
                     break;
                 case SyntaxKind.ExportDeclaration:
-                    error(node, Diagnostics.Exports_are_not_permitted_in_module_augmentations);
+                    grammarErrorOnFirstToken(node, Diagnostics.Exports_are_not_permitted_in_module_augmentations);
                     break;
                 case SyntaxKind.ImportEqualsDeclaration:
                     if ((<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.StringLiteral) {
-                        error(node, Diagnostics.Module_augmentation_cannot_introduce_new_names_in_the_top_level_scope);
+                        error((<ImportEqualsDeclaration>node).name, Diagnostics.Module_augmentation_cannot_introduce_new_names_in_the_top_level_scope);
                         break;
                     }
                     // fallthrough
                 case SyntaxKind.ImportDeclaration:
-                    error(node, Diagnostics.Imports_are_not_permitted_in_module_augmentations_Consider_moving_them_to_the_enclosing_external_module);
+                    grammarErrorOnFirstToken(node, Diagnostics.Imports_are_not_permitted_in_module_augmentations_Consider_moving_them_to_the_enclosing_external_module);
                     break;
                 default:
                     const symbol = getSymbolOfNode(node);

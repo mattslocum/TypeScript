@@ -2011,7 +2011,6 @@ namespace ts {
         /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
-        /* @internal */ moduleAugmentation?: boolean; // True is symbol corresponds to augmentation of external module (it should be excluded during the global merging)
     }
 
     /* @internal */

@@ -1,5 +1,5 @@
-tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts(5,16): error TS2662: Invalid module name in augmentation, module 'ext' cannot be found.
-tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts(6,18): error TS2663: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts(5,16): error TS2661: Invalid module name in augmentation, module 'ext' cannot be found.
+tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts(6,18): error TS2662: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts(10,22): error TS2307: Cannot find module 'ext'.
 
 
@@ -10,10 +10,10 @@ tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts(10,22): err
     
     declare module "ext" {
                    ~~~~~
-!!! error TS2662: Invalid module name in augmentation, module 'ext' cannot be found.
+!!! error TS2661: Invalid module name in augmentation, module 'ext' cannot be found.
         export class C { }
                      ~
-!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
+!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
     }
     
     // Cannot resolve this ext module reference
