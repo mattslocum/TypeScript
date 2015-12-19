@@ -350,7 +350,7 @@ namespace ts {
                 //   2. When we checkIdentifier in the checker, we set its resolved symbol to the local symbol,
                 //      but return the export symbol (by calling getExportSymbolOfValueSymbolIfExported). That way
                 //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
-                
+
                 // NOTE: Nested ambient modules always should go to to 'locals' table to prevent their automatic merge 
                 //       during global merging in the checker.
                 //       The only case when ambient module is permitted inside another module is module augmentation 
