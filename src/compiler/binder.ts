@@ -847,7 +847,8 @@ namespace ts {
             setExportContextFlag(node);
             if (node.name.kind === SyntaxKind.StringLiteral) {
                 const moduleSymbol = declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
-                if (moduleSymbol.valueDeclaration === node) {
+                const valueDecl = moduleSymbol.flags & SymbolFlags.ExportValue ? moduleSymbol.exportSymbol.valueDeclaration : moduleSymbol.valueDeclaration;
+                if (valueDecl === node) {
                     moduleSymbol.moduleAugmentation = isSourceFileExternalModule
                         ? container.kind === SyntaxKind.SourceFile
                         : container.kind === SyntaxKind.ModuleDeclaration && isInAmbientContext(container);

@@ -1767,25 +1767,21 @@
         "category": "Error",
         "code": 2660
     },
-    "Module augmentations should be defined on the top level of the file.": {
+    "Invalid module name in augmentation, module '{0}' cannot be found.": {
         "category": "Error",
         "code": 2661
     },
-    "Invalid module name in augmentation, module '{0}' cannot be found.": {
+    "Module augmentation cannot introduce new names in the top level scope.": {
         "category": "Error",
         "code": 2662
     },
-    "Module augmentation cannot introduce new names in the top level scope.": {
+    "Exports are not permitted in module augmentations.": {
         "category": "Error",
         "code": 2663
     },
-    "Exports are not permitted in module augmentations.": {
-        "category": "Error",
-        "code": 2664
-    },
     "Imports are not permitted in module augmentations. Consider moving them to the enclosing external module": {
         "category": "Error",
-        "code": 2665
+        "code": 2664
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

@@ -427,10 +427,6 @@ namespace ts {
             return nodeLinks[nodeId] || (nodeLinks[nodeId] = {});
         }
 
-        function getSourceFile(node: Node): SourceFile {
-            return <SourceFile>getAncestor(node, SyntaxKind.SourceFile);
-        }
-
         function isGlobalSourceFile(node: Node) {
             return node.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(<SourceFile>node);
         }
@@ -1126,7 +1122,7 @@ namespace ts {
                 }
             }
 
-            const resolvedModule = getResolvedModule(getSourceFile(location), moduleReferenceLiteral.text);
+            const resolvedModule = getResolvedModule(getSourceFileOfNode(location), moduleReferenceLiteral.text);
             const sourceFile = resolvedModule && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
@@ -8666,7 +8662,7 @@ namespace ts {
         function checkIndexedAccess(node: ElementAccessExpression): Type {
             // Grammar checking
             if (!node.argumentExpression) {
-                const sourceFile = getSourceFile(node);
+                const sourceFile = getSourceFileOfNode(node);
                 if (node.parent.kind === SyntaxKind.NewExpression && (<NewExpression>node.parent).expression === node) {
                     const start = skipTrivia(sourceFile.text, node.expression.end);
                     const end = node.end;
@@ -12501,7 +12497,7 @@ namespace ts {
                 // checkFunctionOrConstructorSymbol wouldn't be called if we didnt ignore javascript function.
                 const firstDeclaration = forEach(localSymbol.declarations,
                     // Get first non javascript function declaration
-                    declaration => declaration.kind === node.kind && !isSourceFileJavaScript(getSourceFile(declaration)) ?
+                    declaration => declaration.kind === node.kind && !isSourceFileJavaScript(getSourceFileOfNode(declaration)) ?
                         declaration : undefined);
 
                 // Only type check the symbol once
@@ -14230,12 +14226,13 @@ namespace ts {
 
                 // Checks for ambient external modules.
                 if (isAmbientExternalModule) {
-                    if (isExternalModule(getSourceFileOfNode(node))) {
+                    const isAugmentation = getSymbolOfNode(node).moduleAugmentation;
+                    // it is important to use local symbol here
+                    const localSymbol = node.localSymbol || node.symbol;
+                    if (localSymbol.moduleAugmentation) {
                         // ambient module declaration in external module can be an augmentation for some existing module
                         // augmentations are defined on the top level in source file so we'll error if location is different
-                        if (node.parent.kind !== SyntaxKind.SourceFile) {
-                            error(node.name, Diagnostics.Module_augmentations_should_be_defined_on_the_top_level_of_the_file);
-                        }
+
                         // body of ambient external module is always a module block
                         for (const statement of (<ModuleBlock>node.body).statements) {
                             checkContentOfModuleAugmentation(statement);
@@ -16443,7 +16440,7 @@ namespace ts {
                     return true;
                 }
                 else if (node.body === undefined) {
-                    return grammarErrorAtPos(getSourceFile(node), node.end - 1, ";".length, Diagnostics._0_expected, "{");
+                    return grammarErrorAtPos(getSourceFileOfNode(node), node.end - 1, ";".length, Diagnostics._0_expected, "{");
                 }
             }
 
