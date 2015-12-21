@@ -1,8 +1,30 @@
 // @module: commonjs
 
+// @filename: x0.ts
+export let a = 1;
+
 // @filename: x.ts
+
+namespace N1 {
+    export let x = 1;
+}
+
 declare module "./observable" {
     var x: number;
+    let y: number;
+    const z: number;
+    let {x1, y1}: {x1: number, y1: string}
+    interface A { x }
+    namespace N {
+        export class C {}
+    }
+    class Cls {}
+    function foo(): number;
+    type T = number;
+    import * as all from "./x0";
+    import {a} from "./x0";
+    export * from "./x0";
+    export {a} from "./x0";
 }
 export {}
 

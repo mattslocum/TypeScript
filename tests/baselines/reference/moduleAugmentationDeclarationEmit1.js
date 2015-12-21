@@ -1,4 +1,4 @@
-//// [tests/cases/compiler/moduleAugmentationExtendFileModule.ts] ////
+//// [tests/cases/compiler/moduleAugmentationDeclarationEmit1.ts] ////
 
 //// [map.ts]
 
@@ -47,3 +47,22 @@ observable_1.Observable.prototype.map = function () { };
 require("./map");
 var x;
 var y = x.map(function (x) { return x + 1; });
+
+
+//// [observable.d.ts]
+export declare class Observable<T> {
+    filter(pred: (e: T) => boolean): Observable<T>;
+}
+export declare namespace Observable {
+}
+//// [map.d.ts]
+declare module "./observable" {
+    interface Observable<T> {
+        map<U>(proj: (e: T) => U): Observable<U>;
+    }
+    namespace Observable {
+        let someAnotherValue: number;
+    }
+}
+export {};
+//// [main.d.ts]

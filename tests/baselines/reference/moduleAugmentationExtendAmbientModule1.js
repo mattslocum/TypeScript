@@ -1,4 +1,4 @@
-//// [tests/cases/compiler/moduleAugmentationExtendAmbientModule.ts] ////
+//// [tests/cases/compiler/moduleAugmentationExtendAmbientModule1.ts] ////
 
 //// [map.ts]
 

@@ -1,4 +1,4 @@
-//// [tests/cases/compiler/moduleAugmentationDeclarationEmit.ts] ////
+//// [tests/cases/compiler/moduleAugmentationExtendFileModule2.ts] ////
 
 //// [map.ts]
 
@@ -11,7 +11,7 @@ declare module "./observable" {
         map<U>(proj: (e:T) => U): Observable<U>
     }
     namespace Observable {
-        let someAnotherValue: number;
+        let someAnotherValue: string;
     }
 }
 
@@ -21,7 +21,7 @@ export declare class Observable<T> {
 }
 
 export namespace Observable {
-    let someValue: number;
+    export let someValue: number;
 }
 
 
@@ -31,12 +31,13 @@ import "./map";
 
 let x: Observable<number>;
 let y = x.map(x => x + 1);
+let z1 = Observable.someValue.toFixed();
+let z2 = Observable.someAnotherValue.toLowerCase();
 
 //// [observable.js]
 "use strict";
 var Observable;
 (function (Observable) {
-    var someValue;
 })(Observable = exports.Observable || (exports.Observable = {}));
 //// [map.js]
 "use strict";
@@ -44,25 +45,9 @@ var observable_1 = require("./observable");
 observable_1.Observable.prototype.map = function () { };
 //// [main.js]
 "use strict";
+var observable_1 = require("./observable");
 require("./map");
 var x;
 var y = x.map(function (x) { return x + 1; });
-
-
-//// [observable.d.ts]
-export declare class Observable<T> {
-    filter(pred: (e: T) => boolean): Observable<T>;
-}
-export declare namespace Observable {
-}
-//// [map.d.ts]
-declare module "./observable" {
-    interface Observable<T> {
-        map<U>(proj: (e: T) => U): Observable<U>;
-    }
-    namespace Observable {
-        let someAnotherValue: number;
-    }
-}
-export {};
-//// [main.d.ts]
+var z1 = observable_1.Observable.someValue.toFixed();
+var z2 = observable_1.Observable.someAnotherValue.toLowerCase();
