@@ -369,27 +369,30 @@ namespace ts {
         }
 
         function mergeModuleAugmentation(moduleName: LiteralExpression): void {
-            const moduleDeclaration = <ModuleDeclaration>moduleName.parent;
-            if (moduleDeclaration.symbol.valueDeclaration !== moduleDeclaration) {
+            const moduleAugmentation = <ModuleDeclaration>moduleName.parent;
+            if (moduleAugmentation.symbol.valueDeclaration !== moduleAugmentation) {
                 // this is a combined symbol for multiple augmentations within the same file.
                 // its symbol already has accumulated information for all declarations 
                 // so we need to add it just once - do the work only for first declaration 
-                Debug.assert(moduleDeclaration.symbol.declarations.length > 1);
+                Debug.assert(moduleAugmentation.symbol.declarations.length > 1);
                 return;
             }
 
             if (moduleName.text === "/") {
                 // global augmentation
                 // TODO: fix to use 'declare global' syntax.
-                mergeSymbolTable(globals, moduleDeclaration.symbol.exports);
+                mergeSymbolTable(globals, moduleAugmentation.symbol.exports);
             }
             else {
+                // find a module that about to be augmented 
                 let mainModule = resolveExternalModuleNameWorker(moduleName, moduleName, Diagnostics.Invalid_module_name_in_augmentation_module_0_cannot_be_found);
                 if (!mainModule) {
                     return;
                 }
+                // is module symbol is already merged - it is safe to use it.
+                // otherwise clone it
                 mainModule = mainModule.flags & SymbolFlags.Merged ? mainModule : cloneSymbol(mainModule);
-                mergeSymbol(mainModule, moduleDeclaration.symbol);
+                mergeSymbol(mainModule, moduleAugmentation.symbol);
             }
         }
 
@@ -1113,6 +1116,7 @@ namespace ts {
             if (!isRelative) {
                 const symbol = getSymbol(globals, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
                 if (symbol) {
+                    // merged symbol is module declaration symbol combined with all augmentations
                     return getMergedSymbol(symbol);
                 }
             }
@@ -1121,6 +1125,7 @@ namespace ts {
             const sourceFile = resolvedModule && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
+                    // merged symbol is module declaration symbol combined with all augmentations
                     return getMergedSymbol(sourceFile.symbol);
                 }
                 if (moduleNotFoundError) {
@@ -14188,6 +14193,8 @@ namespace ts {
                         }
                     }
                     else {
+                        // Node is not an augmentation and is not located on the script level.
+                        // This means that this is declaration of ambient module that is located in other module or namespace which is prohibited.
                         error(node.name, Diagnostics.Ambient_modules_cannot_be_nested_in_other_modules_or_namespaces);
                     }
                 }
@@ -14202,6 +14209,7 @@ namespace ts {
                     for (const decl of (<VariableStatement>node).declarationList.declarations) {
                         if (isBindingPattern(decl.name)) {
                             for (const el of (<BindingPattern>decl.name).elements) {
+                                // mark individual names in binding pattern
                                 checkBodyOfModuleAugmentation(el.name);
                             }
                         }
@@ -14224,6 +14232,7 @@ namespace ts {
                     break;
                 default:
                     const symbol = getSymbolOfNode(node);
+                    // is this symbol is not merged - this means it is symbol for some named entity that was introduced in this augmentation
                     if (!symbol || !(symbol.flags & SymbolFlags.Merged)) {
                         error(node, Diagnostics.Module_augmentation_cannot_introduce_new_names_in_the_top_level_scope);
                     }

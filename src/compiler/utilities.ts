@@ -251,8 +251,8 @@ namespace ts {
             isCatchClauseVariableDeclaration(declaration);
     }
 
-    function isAmbientModule(node: Node): boolean {
-        return node && node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && isInAmbientContext(node);
+    export function isAmbientModule(node: Node): boolean {
+        return node && node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral;
     }
 
     export function isExternalModuleAugmentation(node: Node): boolean {
