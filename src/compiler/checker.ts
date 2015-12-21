@@ -378,7 +378,7 @@ namespace ts {
                 return;
             }
 
-            if (moduleName.text === "/") {
+            if (isGlobalAugmentation(moduleName)) {
                 // global augmentation
                 // TODO: fix to use 'declare global' syntax.
                 mergeSymbolTable(globals, moduleAugmentation.symbol.exports);
@@ -14183,8 +14183,9 @@ namespace ts {
                 if (isAmbientExternalModule) {
                     if (isExternalModuleAugmentation(node)) {
                         // body of ambient external module is always a module block
+                        const globalAugmentation = isGlobalAugmentation(<LiteralExpression>node.name);
                         for (const statement of (<ModuleBlock>node.body).statements) {
-                            checkBodyOfModuleAugmentation(statement);
+                            checkBodyOfModuleAugmentation(statement, globalAugmentation);
                         }
                     }
                     else if (isGlobalSourceFile(node.parent)) {
@@ -14202,7 +14203,11 @@ namespace ts {
             checkSourceElement(node.body);
         }
 
-        function checkBodyOfModuleAugmentation(node: Node): void {
+        function isGlobalAugmentation(node: LiteralExpression): boolean {
+            return node.text === "/";
+        }
+
+        function checkBodyOfModuleAugmentation(node: Node, isGlobalAugmentation: boolean): void {
             switch (node.kind) {
                 case SyntaxKind.VariableStatement:
                     // error each individual name in variable statement instead of marking the entire variable statement
@@ -14210,11 +14215,11 @@ namespace ts {
                         if (isBindingPattern(decl.name)) {
                             for (const el of (<BindingPattern>decl.name).elements) {
                                 // mark individual names in binding pattern
-                                checkBodyOfModuleAugmentation(el.name);
+                                checkBodyOfModuleAugmentation(el, isGlobalAugmentation);
                             }
                         }
                         else {
-                            checkBodyOfModuleAugmentation(decl.name);
+                            checkBodyOfModuleAugmentation(decl, isGlobalAugmentation);
                         }
                     }
                     break;
@@ -14232,9 +14237,22 @@ namespace ts {
                     break;
                 default:
                     const symbol = getSymbolOfNode(node);
-                    // is this symbol is not merged - this means it is symbol for some named entity that was introduced in this augmentation
-                    if (!symbol || !(symbol.flags & SymbolFlags.Merged)) {
-                        error(node, Diagnostics.Module_augmentation_cannot_introduce_new_names_in_the_top_level_scope);
+                    if (symbol) {
+                        // module augmentations cannot introduce new names on the top level scope of the module
+                        // this is done it two steps
+                        // 1. quick check - if symbol for node is not merged - this is local symbol to this augmentation - report error
+                        // 2. main check - pick the first declaration from the symbol and check if it comes from some external module (or global scope in case of augmentation for the global scope)
+                        // Augmentations are always merged into external module meaning that for all proper names first declaration should come from the external module.
+                        let reportError = !(symbol.flags & SymbolFlags.Merged);
+                        if (!reportError) {
+                            const firstDecl = symbol.declarations[0];
+                            reportError = isGlobalAugmentation
+                                ? !isGlobalSourceFile(firstDecl.parent)
+                                : !isTopLevelInExternalModule(firstDecl);
+                        }
+                        if (reportError) {
+                            error(node, Diagnostics.Module_augmentation_cannot_introduce_new_names_in_the_top_level_scope);
+                        }
                     }
                     break;
             }

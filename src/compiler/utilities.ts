@@ -255,23 +255,27 @@ namespace ts {
         return node && node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral;
     }
 
+    export function isTopLevelInExternalModule(node: Node): boolean {
+        // node is a top level item in some external module if
+        return node && node.parent &&
+            (
+                // it is parented by source file and this file is external module
+                (node.parent.kind == SyntaxKind.SourceFile && isExternalModule(<SourceFile>node.parent)) ||
+                // OR 
+                // it is parented by ambient module that is directly nested in some source file that is not external module
+                (
+                    node.parent.kind === SyntaxKind.ModuleBlock &&
+                    isAmbientModule(node.parent.parent) &&
+                    node.parent.parent.parent.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>node.parent.parent.parent)
+                )
+            );
+    }
+
     export function isExternalModuleAugmentation(node: Node): boolean {
         // external module augmentation is a ambient module declaration that is either:
         // - defined in the top level scope and source file is an external module
         // - defined inside ambient module declaration located in the top level scope and source file not an external module
-        if (!node || !isAmbientModule(node)) {
-            return false;
-        }
-        switch (node.parent.kind) {
-            case SyntaxKind.SourceFile:
-                return isExternalModule(<SourceFile>node.parent);
-            case SyntaxKind.ModuleBlock:
-                return isAmbientModule(node.parent.parent) &&
-                    node.parent.parent.parent.kind === SyntaxKind.SourceFile &&
-                    !isExternalModule(<SourceFile>node.parent.parent.parent);
-            default:
-                return false;
-        }
+        return node && isAmbientModule(node) && isTopLevelInExternalModule(node);
     }
 
     // Gets the nearest enclosing block scope container that has the provided node
