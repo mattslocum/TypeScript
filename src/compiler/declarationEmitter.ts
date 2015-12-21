@@ -491,7 +491,6 @@ namespace ts {
         }
 
         function emitSourceFile(node: SourceFile) {
-            resultHasExternalModuleSpecifier = false;
             currentText = node.text;
             currentLineMap = getLineStarts(node);
             currentIdentifiers = node.identifiers;
@@ -745,7 +744,7 @@ namespace ts {
                 const node = parent as (ImportDeclaration | ExportDeclaration);
                 moduleSpecifier = node.moduleSpecifier;
             }
-            
+
             if (moduleSpecifier.kind === SyntaxKind.StringLiteral && isBundledEmit && (compilerOptions.out || compilerOptions.outFile)) {
                 const moduleName = getExternalModuleNameFromDeclaration(host, resolver, parent);
                 if (moduleName) {
