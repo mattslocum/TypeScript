@@ -1123,10 +1123,17 @@ namespace ts {
                 if (sourceFile.symbol) {
                     return getMergedSymbol(sourceFile.symbol);
                 }
-                error(moduleReferenceLiteral, Diagnostics.File_0_is_not_a_module, sourceFile.fileName);
-                return;
+                if (moduleNotFoundError) {
+                    // report errors only if it was requested 
+                    error(moduleReferenceLiteral, Diagnostics.File_0_is_not_a_module, sourceFile.fileName);
+                }
+                return undefined;
             }
-            error(moduleReferenceLiteral, moduleNotFoundError, moduleName);
+            if (moduleNotFoundError) {
+                // report errors only if it was requested
+                error(moduleReferenceLiteral, moduleNotFoundError, moduleName);
+            }
+            return undefined;
         }
 
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
@@ -1665,29 +1672,6 @@ namespace ts {
                 }
             }
             return undefined;
-        }
-
-        function isAmbientModule(node: Node): boolean {
-            return node && node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && isInAmbientContext(node);
-        }
-
-        function isExternalModuleAugmentation(node: Node): boolean {
-            // external module augmentation is a ambient module declaration that is either:
-            // - defined in the top level scope and source file is an external module
-            // - defined inside ambient module declaration located in the top level scope and source file not an external module
-            if (!node || !isAmbientModule(node)) {
-                return false;
-            }
-            switch (node.parent.kind) {
-                case SyntaxKind.SourceFile:
-                    return isExternalModule(<SourceFile>node.parent);
-                case SyntaxKind.ModuleBlock:
-                    return isAmbientModule(node.parent.parent) &&
-                        node.parent.parent.parent.kind === SyntaxKind.SourceFile &&
-                        !isExternalModule(<SourceFile>node.parent.parent.parent);
-                default:
-                    return false;
-            }
         }
 
         function isTopLevelInExternalModuleAugmentation(node: Node): boolean {
@@ -15563,13 +15547,13 @@ namespace ts {
             };
         }
 
-        function getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): SourceFile {
-                const specifier = getExternalModuleName(declaration);
-                const moduleSymbol = getSymbolAtLocation(specifier);
-                if (!moduleSymbol) {
-                    return undefined;
-                }
-                return getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
+        function getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile {
+            const specifier = getExternalModuleName(declaration);
+            const moduleSymbol = resolveExternalModuleNameWorker(specifier, specifier, /*moduleNotFoundError*/ undefined);
+            if (!moduleSymbol) {
+                return undefined;
+            }
+            return getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
         }
 
         function initializeTypeChecker() {
