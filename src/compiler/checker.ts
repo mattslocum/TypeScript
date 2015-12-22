@@ -14241,7 +14241,7 @@ namespace ts {
                         // module augmentations cannot introduce new names on the top level scope of the module
                         // this is done it two steps
                         // 1. quick check - if symbol for node is not merged - this is local symbol to this augmentation - report error
-                        // 2. main check - pick the first declaration from the symbol and check if it comes from some external module (or global scope in case of augmentation for the global scope)
+                        // 2. main check - report error if value declaration of the parent symbol is module augmentation)
                         // Augmentations are always merged into external module meaning that for all proper names first declaration should come from the external module.
                         let reportError = !(symbol.flags & SymbolFlags.Merged);
                         if (!reportError) {
