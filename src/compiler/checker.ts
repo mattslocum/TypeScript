@@ -14242,7 +14242,6 @@ namespace ts {
                         // this is done it two steps
                         // 1. quick check - if symbol for node is not merged - this is local symbol to this augmentation - report error
                         // 2. main check - report error if value declaration of the parent symbol is module augmentation)
-                        // Augmentations are always merged into external module meaning that for all proper names first declaration should come from the external module.
                         let reportError = !(symbol.flags & SymbolFlags.Merged);
                         if (!reportError) {
                             if (isGlobalAugmentation) {
