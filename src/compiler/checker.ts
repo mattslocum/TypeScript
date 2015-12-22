@@ -378,9 +378,7 @@ namespace ts {
                 return;
             }
 
-            if (isGlobalAugmentation(moduleName)) {
-                // global augmentation
-                // TODO: fix to use 'declare global' syntax.
+            if (isNameOfGlobalAugmentation(moduleName)) {
                 mergeSymbolTable(globals, moduleAugmentation.symbol.exports);
             }
             else {
@@ -14183,7 +14181,7 @@ namespace ts {
                 if (isAmbientExternalModule) {
                     if (isExternalModuleAugmentation(node)) {
                         // body of ambient external module is always a module block
-                        const globalAugmentation = isGlobalAugmentation(<LiteralExpression>node.name);
+                        const globalAugmentation = isNameOfGlobalAugmentation(<LiteralExpression>node.name);
                         for (const statement of (<ModuleBlock>node.body).statements) {
                             checkBodyOfModuleAugmentation(statement, globalAugmentation);
                         }
@@ -14203,7 +14201,9 @@ namespace ts {
             checkSourceElement(node.body);
         }
 
-        function isGlobalAugmentation(node: LiteralExpression): boolean {
+        function isNameOfGlobalAugmentation(node: LiteralExpression): boolean {
+            // global augmentation
+            // TODO: fix to use 'declare global' syntax.
             return node.text === "/";
         }
 
