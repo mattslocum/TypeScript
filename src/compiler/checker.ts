@@ -14245,10 +14245,17 @@ namespace ts {
                         // Augmentations are always merged into external module meaning that for all proper names first declaration should come from the external module.
                         let reportError = !(symbol.flags & SymbolFlags.Merged);
                         if (!reportError) {
-                            const firstDecl = symbol.declarations[0];
-                            reportError = isGlobalAugmentation
-                                ? !isGlobalSourceFile(firstDecl.parent)
-                                : !isTopLevelInExternalModule(firstDecl);
+                            if (isGlobalAugmentation) {
+                                // global symbol should not have parent since it is not explicitly exported
+                                reportError = symbol.parent !== undefined;
+                            }
+                            else {
+                                // this symbol contains only merged content from external modules and augmentations so it should always be exported (parent !== undefined)
+                                // and parent should have value side (valueDeclaration !== undefined)
+                                Debug.assert(symbol.parent !== undefined && symbol.parent.valueDeclaration !== undefined);
+                                // symbol should not originate in augmentation
+                                reportError = isExternalModuleAugmentation(symbol.parent.valueDeclaration);
+                            }
                         }
                         if (reportError) {
                             error(node, Diagnostics.Module_augmentation_cannot_introduce_new_names_in_the_top_level_scope);
