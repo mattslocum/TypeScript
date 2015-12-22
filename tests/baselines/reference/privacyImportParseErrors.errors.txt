@@ -18,88 +18,44 @@ tests/cases/compiler/privacyImportParseErrors.ts(166,43): error TS1147: Import d
 tests/cases/compiler/privacyImportParseErrors.ts(167,43): error TS1147: Import declarations in a namespace cannot reference a module.
 tests/cases/compiler/privacyImportParseErrors.ts(180,1): error TS2665: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
 tests/cases/compiler/privacyImportParseErrors.ts(180,23): error TS2661: Invalid module name in augmentation, module 'glo_M2_public' cannot be found.
-tests/cases/compiler/privacyImportParseErrors.ts(181,21): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(182,18): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(184,16): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(185,16): error TS2662: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/privacyImportParseErrors.ts(198,1): error TS2665: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
 tests/cases/compiler/privacyImportParseErrors.ts(198,23): error TS2661: Invalid module name in augmentation, module 'glo_M4_private' cannot be found.
-tests/cases/compiler/privacyImportParseErrors.ts(199,21): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(200,18): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(202,16): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(203,16): error TS2662: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/privacyImportParseErrors.ts(218,34): error TS2307: Cannot find module 'glo_M2_public'.
 tests/cases/compiler/privacyImportParseErrors.ts(238,34): error TS2307: Cannot find module 'glo_M4_private'.
 tests/cases/compiler/privacyImportParseErrors.ts(251,40): error TS2307: Cannot find module 'glo_M2_public'.
 tests/cases/compiler/privacyImportParseErrors.ts(252,40): error TS2307: Cannot find module 'glo_M4_private'.
 tests/cases/compiler/privacyImportParseErrors.ts(255,1): error TS2665: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
 tests/cases/compiler/privacyImportParseErrors.ts(255,23): error TS2661: Invalid module name in augmentation, module 'use_glo_M1_public' cannot be found.
-tests/cases/compiler/privacyImportParseErrors.ts(256,12): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(257,16): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(258,16): error TS2662: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/privacyImportParseErrors.ts(258,45): error TS2304: Cannot find name 'use_glo_M1_public'.
-tests/cases/compiler/privacyImportParseErrors.ts(259,16): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(260,9): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(261,9): error TS2662: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/privacyImportParseErrors.ts(261,39): error TS2304: Cannot find name 'use_glo_M1_public'.
-tests/cases/compiler/privacyImportParseErrors.ts(262,9): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(264,12): error TS2662: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/privacyImportParseErrors.ts(264,40): error TS2307: Cannot find module 'glo_M2_public'.
-tests/cases/compiler/privacyImportParseErrors.ts(265,16): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(266,16): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(267,16): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(268,9): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(269,9): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(270,9): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(272,12): error TS2662: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/privacyImportParseErrors.ts(273,38): error TS1147: Import declarations in a namespace cannot reference a module.
 tests/cases/compiler/privacyImportParseErrors.ts(277,45): error TS1147: Import declarations in a namespace cannot reference a module.
 tests/cases/compiler/privacyImportParseErrors.ts(284,16): error TS2661: Invalid module name in augmentation, module 'use_glo_M3_private' cannot be found.
-tests/cases/compiler/privacyImportParseErrors.ts(285,12): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(286,16): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(287,16): error TS2662: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/privacyImportParseErrors.ts(287,46): error TS2304: Cannot find name 'use_glo_M3_private'.
-tests/cases/compiler/privacyImportParseErrors.ts(288,16): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(289,9): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(290,9): error TS2662: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/privacyImportParseErrors.ts(290,40): error TS2304: Cannot find name 'use_glo_M3_private'.
-tests/cases/compiler/privacyImportParseErrors.ts(291,9): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(293,12): error TS2662: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/privacyImportParseErrors.ts(293,41): error TS2307: Cannot find module 'glo_M4_private'.
-tests/cases/compiler/privacyImportParseErrors.ts(294,16): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(295,16): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(296,16): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(297,9): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(298,9): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(299,9): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/privacyImportParseErrors.ts(301,12): error TS2662: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/privacyImportParseErrors.ts(302,38): error TS1147: Import declarations in a namespace cannot reference a module.
 tests/cases/compiler/privacyImportParseErrors.ts(306,45): error TS1147: Import declarations in a namespace cannot reference a module.
 tests/cases/compiler/privacyImportParseErrors.ts(312,16): error TS2661: Invalid module name in augmentation, module 'anotherParseError' cannot be found.
-tests/cases/compiler/privacyImportParseErrors.ts(313,12): error TS2662: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/privacyImportParseErrors.ts(314,9): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 tests/cases/compiler/privacyImportParseErrors.ts(314,24): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
-tests/cases/compiler/privacyImportParseErrors.ts(318,12): error TS2662: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/privacyImportParseErrors.ts(319,16): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 tests/cases/compiler/privacyImportParseErrors.ts(322,12): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
-tests/cases/compiler/privacyImportParseErrors.ts(322,12): error TS2662: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/privacyImportParseErrors.ts(326,1): error TS2665: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
 tests/cases/compiler/privacyImportParseErrors.ts(326,9): error TS1029: 'export' modifier must precede 'declare' modifier.
 tests/cases/compiler/privacyImportParseErrors.ts(326,23): error TS2661: Invalid module name in augmentation, module 'anotherParseError2' cannot be found.
-tests/cases/compiler/privacyImportParseErrors.ts(327,12): error TS2662: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/privacyImportParseErrors.ts(328,9): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 tests/cases/compiler/privacyImportParseErrors.ts(328,24): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
-tests/cases/compiler/privacyImportParseErrors.ts(332,12): error TS2662: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/privacyImportParseErrors.ts(333,16): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 tests/cases/compiler/privacyImportParseErrors.ts(336,12): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
-tests/cases/compiler/privacyImportParseErrors.ts(336,12): error TS2662: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/privacyImportParseErrors.ts(341,25): error TS1147: Import declarations in a namespace cannot reference a module.
 tests/cases/compiler/privacyImportParseErrors.ts(344,29): error TS1147: Import declarations in a namespace cannot reference a module.
 tests/cases/compiler/privacyImportParseErrors.ts(350,25): error TS1147: Import declarations in a namespace cannot reference a module.
 tests/cases/compiler/privacyImportParseErrors.ts(353,29): error TS1147: Import declarations in a namespace cannot reference a module.
 
 
-==== tests/cases/compiler/privacyImportParseErrors.ts (99 errors) ====
+==== tests/cases/compiler/privacyImportParseErrors.ts (55 errors) ====
     export module m1 {
         export module m1_M1_public {
             export class c1 {
@@ -321,18 +277,10 @@ tests/cases/compiler/privacyImportParseErrors.ts(353,29): error TS1147: Import d
                           ~~~~~~~~~~~~~~~
 !!! error TS2661: Invalid module name in augmentation, module 'glo_M2_public' cannot be found.
         export function f1();
-                        ~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         export class c1 {
-                     ~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         }
         export var v1: { new (): c1; };
-                   ~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         export var v2: c1;
-                   ~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
     }
     
     export module glo_M3_private {
@@ -351,18 +299,10 @@ tests/cases/compiler/privacyImportParseErrors.ts(353,29): error TS1147: Import d
                           ~~~~~~~~~~~~~~~~
 !!! error TS2661: Invalid module name in augmentation, module 'glo_M4_private' cannot be found.
         export function f1();
-                        ~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         export class c1 {
-                     ~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         }
         export var v1: { new (): c1; };
-                   ~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         export var v2: c1;
-                   ~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
     }
     
     
@@ -428,58 +368,28 @@ tests/cases/compiler/privacyImportParseErrors.ts(353,29): error TS1147: Import d
                           ~~~~~~~~~~~~~~~~~~~
 !!! error TS2661: Invalid module name in augmentation, module 'use_glo_M1_public' cannot be found.
         import use_glo_M1_public = glo_M1_public;
-               ~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         export var use_glo_M1_public_v1_public: { new (): use_glo_M1_public.c1; };
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         export var use_glo_M1_public_v2_public: use_glo_M1_public;
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
                                                 ~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'use_glo_M1_public'.
         export var use_glo_M1_public_v3_public: () => use_glo_M1_public.c1;
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         var use_glo_M1_public_v1_private: { new (): use_glo_M1_public.c1; };
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         var use_glo_M1_public_v2_private: use_glo_M1_public;
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
                                           ~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'use_glo_M1_public'.
         var use_glo_M1_public_v3_private: () => use_glo_M1_public.c1;
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
     
         import use_glo_M2_public = require("glo_M2_public");
-               ~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
                                            ~~~~~~~~~~~~~~~
 !!! error TS2307: Cannot find module 'glo_M2_public'.
         export var use_glo_M2_public_v1_public: { new (): use_glo_M2_public.c1; };
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         export var use_glo_M2_public_v2_public: use_glo_M2_public;
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         export var use_glo_M2_public_v3_public: () => use_glo_M2_public.c1;
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         var use_glo_M2_public_v1_private: { new (): use_glo_M2_public.c1; };
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         var use_glo_M2_public_v2_private: use_glo_M2_public;
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
     
         module m2 {
-               ~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
             import errorImport = require("glo_M2_public");
                                          ~~~~~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
@@ -499,58 +409,28 @@ tests/cases/compiler/privacyImportParseErrors.ts(353,29): error TS1147: Import d
                    ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2661: Invalid module name in augmentation, module 'use_glo_M3_private' cannot be found.
         import use_glo_M3_private = glo_M3_private;
-               ~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         export var use_glo_M3_private_v1_public: { new (): use_glo_M3_private.c1; };
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         export var use_glo_M3_private_v2_public: use_glo_M3_private;
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
                                                  ~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'use_glo_M3_private'.
         export var use_glo_M3_private_v3_public: () => use_glo_M3_private.c1;
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         var use_glo_M3_private_v1_private: { new (): use_glo_M3_private.c1; };
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         var use_glo_M3_private_v2_private: use_glo_M3_private;
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
                                            ~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'use_glo_M3_private'.
         var use_glo_M3_private_v3_private: () => use_glo_M3_private.c1;
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
     
         import use_glo_M4_private = require("glo_M4_private");
-               ~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
                                             ~~~~~~~~~~~~~~~~
 !!! error TS2307: Cannot find module 'glo_M4_private'.
         export var use_glo_M4_private_v1_public: { new (): use_glo_M4_private.c1; };
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         export var use_glo_M4_private_v2_public: use_glo_M4_private;
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         export var use_glo_M4_private_v3_public: () => use_glo_M4_private.c1;
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         var use_glo_M4_private_v1_private: { new (): use_glo_M4_private.c1; };
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         var use_glo_M4_private_v2_private: use_glo_M4_private;
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         var use_glo_M4_private_v3_private: () => use_glo_M4_private.c1;
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
     
         module m2 {
-               ~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
             import errorImport = require("glo_M4_private");
                                          ~~~~~~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
@@ -569,8 +449,6 @@ tests/cases/compiler/privacyImportParseErrors.ts(353,29): error TS1147: Import d
                    ~~~~~~~~~~~~~~~~~~~
 !!! error TS2661: Invalid module name in augmentation, module 'anotherParseError' cannot be found.
         module m2 {
-               ~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
             declare module "abc" {
             ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
@@ -580,8 +458,6 @@ tests/cases/compiler/privacyImportParseErrors.ts(353,29): error TS1147: Import d
         }
     
         module m2 {
-               ~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
             module "abc2" {
                    ~~~~~~
 !!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
@@ -590,8 +466,6 @@ tests/cases/compiler/privacyImportParseErrors.ts(353,29): error TS1147: Import d
         module "abc3" {
                ~~~~~~
 !!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
-               ~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         }
     }
     
@@ -603,8 +477,6 @@ tests/cases/compiler/privacyImportParseErrors.ts(353,29): error TS1147: Import d
                           ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2661: Invalid module name in augmentation, module 'anotherParseError2' cannot be found.
         module m2 {
-               ~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
             declare module "abc" {
             ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
@@ -614,8 +486,6 @@ tests/cases/compiler/privacyImportParseErrors.ts(353,29): error TS1147: Import d
         }
     
         module m2 {
-               ~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
             module "abc2" {
                    ~~~~~~
 !!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
@@ -624,8 +494,6 @@ tests/cases/compiler/privacyImportParseErrors.ts(353,29): error TS1147: Import d
         module "abc3" {
                ~~~~~~
 !!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
-               ~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
         }
     }
     

@@ -14180,10 +14180,18 @@ namespace ts {
 
                 if (isAmbientExternalModule) {
                     if (isExternalModuleAugmentation(node)) {
-                        // body of ambient external module is always a module block
-                        const globalAugmentation = isNameOfGlobalAugmentation(<LiteralExpression>node.name);
-                        for (const statement of (<ModuleBlock>node.body).statements) {
-                            checkBodyOfModuleAugmentation(statement, globalAugmentation);
+                        // if symbol of augmentation is not merged this means that either
+                        // - this is an augmentation of the global scope 
+                        // or
+                        // - this augmentation was not merged with main definition of the module
+                        //   error should already be reported so all errors in the body of augmentation can be ignored.
+                        const checkBody = isNameOfGlobalAugmentation(<LiteralExpression>node.name) || (getSymbolOfNode(node).flags & SymbolFlags.Merged);                            
+                        if (checkBody) {
+                            const globalAugmentation = isNameOfGlobalAugmentation(<LiteralExpression>node.name);
+                            // body of ambient external module is always a module block
+                            for (const statement of (<ModuleBlock>node.body).statements) {
+                                checkBodyOfModuleAugmentation(statement, globalAugmentation);
+                            }
                         }
                     }
                     else if (isGlobalSourceFile(node.parent)) {
