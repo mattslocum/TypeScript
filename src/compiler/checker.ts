@@ -15595,17 +15595,26 @@ namespace ts {
                 bindSourceFile(file, compilerOptions);
             });
 
+            let mergeAugmentations = false;
             // Initialize global symbol table
             forEach(host.getSourceFiles(), file => {
                 if (!isExternalOrCommonJsModule(file)) {
                     mergeSymbolTable(globals, file.locals);
                 }
-                if (file.moduleAugmentations.length) {
-                    for (const augmentation of file.moduleAugmentations) {
-                        mergeModuleAugmentation(augmentation);
+                mergeAugmentations = mergeAugmentations || file.moduleAugmentations.length > 0;
+            });
+
+            if (mergeAugmentations) {
+                // merge module augmentations.
+                // this needs to be done after global symbol table is initialized to make sure that all ambient modules are indexed 
+                for (const file of host.getSourceFiles()) {
+                    if (file.moduleAugmentations.length) {
+                        for (const augmentation of file.moduleAugmentations) {
+                            mergeModuleAugmentation(augmentation);
+                        }
                     }
                 }
-            });
+            }
 
             // Setup global builtins
             addToSymbolTable(globals, builtinGlobals, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0);
