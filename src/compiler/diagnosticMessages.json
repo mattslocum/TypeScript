@@ -2534,7 +2534,11 @@
     "Expected type of 'typings' field in 'package.json' to be 'string', got '{0}'.": {
         "category": "Message",
         "code": 6113
-    },    
+    },
+    "Module '{0}' was not resolved, falling back to 'node module resolution'.": {
+        "category": "Message",
+        "code": 6114
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
