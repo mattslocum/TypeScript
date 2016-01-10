@@ -1925,6 +1925,7 @@ namespace ts {
             diagnostics = [];
             addRange(/*to*/ diagnostics, /*from*/ program.getSyntacticDiagnostics(sourceFile));
             addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
+            addRange(/*to*/ diagnostics, /*from*/ program.getDeclarationDiagnostics());
         }
         // Emit
         program.emit();
